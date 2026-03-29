@@ -1,0 +1,125 @@
+:root {
+    --bg-primary: #121212;
+    --bg-card: #1e1e1e;
+    --bg-canvas: #0a0a0a;
+    --accent-blue: #3b82f6;
+    --accent-blue-hover: #2563eb;
+    --accent-green: #22c55e;
+    --accent-green-hover: #16a34a;
+    --accent-red: #ef4444;
+    --accent-red-hover: #dc2626;
+    --accent-yellow: #eab308;
+    --accent-yellow-hover: #ca8a04;
+    --text-primary: #ffffff;
+    --text-secondary: #9ca3af;
+    --color-pivot: #ef4444;
+    --color-compare: #eab308;
+    --color-sorted: #22c55e;
+    --color-default: #3b82f6;
+    --color-swap: #a855f7;
+    --gradient-start: #1e40af;
+    --gradient-end: #3b82f6;
+}
+
+* { font-family: 'Inter', sans-serif; }
+
+body { background-color: var(--bg-primary); color: var(--text-primary); }
+
+.btn-primary { background-color: var(--accent-blue); transition: all 0.2s ease; }
+.btn-primary:hover { background-color: var(--accent-blue-hover); transform: translateY(-1px); }
+
+.btn-success { background-color: var(--accent-green); transition: all 0.2s ease; }
+.btn-success:hover { background-color: var(--accent-green-hover); transform: translateY(-1px); }
+
+.btn-danger { background-color: var(--accent-red); transition: all 0.2s ease; }
+.btn-danger:hover { background-color: var(--accent-red-hover); transform: translateY(-1px); }
+
+.btn-warning { background-color: var(--accent-yellow); transition: all 0.2s ease; }
+.btn-warning:hover { background-color: var(--accent-yellow-hover); transform: translateY(-1px); }
+
+.btn-info { background-color: #06b6d4; transition: all 0.2s ease; }
+.btn-info:hover { background-color: #0891b2; transform: translateY(-1px); }
+
+.btn-secondary { background-color: #4b5563; transition: all 0.2s ease; }
+.btn-secondary:hover { background-color: #374151; }
+
+.slider-container input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    background: #374151;
+    border-radius: 3px;
+    outline: none;
+}
+
+.slider-container input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: var(--accent-blue);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.slider-container input[type="range"]::-webkit-slider-thumb:hover {
+    background: var(--accent-blue-hover);
+    transform: scale(1.2);
+}
+
+select, input[type="text"] {
+    background-color: #374151;
+    color: white;
+    border: 1px solid #4b5563;
+    transition: all 0.2s;
+}
+
+select:focus, input[type="text"]:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+input[type="text"]::placeholder { color: #6b7280; }
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.legend-color {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    box-shadow: 0 0 8px currentColor;
+}
+
+canvas {
+    image-rendering: pixelated;
+    background-color: var(--bg-canvas);
+}
+
+.code-line {
+    transition: background-color 0.15s ease;
+    border-left: 2px solid transparent;
+}
+
+.code-line:hover { background-color: rgba(59, 130, 246, 0.1); }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #1f2937; border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+
+input[type="checkbox"] { accent-color: var(--accent-blue); }
+
+@media (max-width: 768px) {
+    body { padding: 0.5rem; }
+    .legend-item span { font-size: 0.75rem; }
+}
+
+.quiz-option { transition: all 0.2s; }
+.quiz-option:hover:not(:disabled) { transform: scale(1.02); }
+.quiz-option:disabled { cursor: default; }

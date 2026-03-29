@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualiseur d'Algorithmes de Tri v3 - Ultimate+</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style_v3.css">
+</head>
+<body class="min-h-screen p-4">
+    <div class="w-full max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="rounded-2xl overflow-hidden shadow-2xl mb-6" style="background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);">
+            <div class="px-8 py-6">
+                <h1 class="text-3xl font-bold text-white tracking-tight">Visualiseur d'Algorithmes de Tri v3</h1>
+                <p class="text-blue-100 text-sm mt-1">13 algorithmes, mode comparaison, quiz et statistiques graphiques</p>
+            </div>
+        </div>
+
+        <!-- Mode Selector -->
+        <div class="flex gap-2 mb-6">
+            <button id="modeSingle" class="px-4 py-2 rounded-lg font-semibold text-sm bg-blue-600 text-white">Mode Simple</button>
+            <button id="modeDual" class="px-4 py-2 rounded-lg font-semibold text-sm bg-gray-600 text-white">Mode Comparaison</button>
+        </div>
+
+        <!-- SINGLE MODE -->
+        <div id="singleView" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Main Content -->
+            <div class="lg:col-span-2 space-y-4">
+                <div class="rounded-2xl overflow-hidden shadow-2xl" style="background-color: var(--bg-card);">
+                    
+                    <!-- Controls -->
+                    <div class="px-6 py-4 border-b border-gray-700">
+                        <div class="flex flex-wrap items-center gap-4">
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs font-medium text-gray-400 uppercase tracking-wider">Algorithme</label>
+                                <select id="algorithmSelect" class="px-3 py-2 rounded-lg text-sm font-medium min-w-[180px] bg-gray-700 text-white border border-gray-600">
+                                    <option value="bubble">Bubble Sort</option>
+                                    <option value="quick">Quick Sort</option>
+                                    <option value="merge">Merge Sort</option>
+                                    <option value="heap">Heap Sort</option>
+                                    <option value="insertion">Insertion Sort</option>
+                                    <option value="selection">Selection Sort</option>
+                                    <option value="counting">Counting Sort</option>
+                                    <option value="radix">Radix Sort</option>
+                                    <option value="shell">Shell Sort</option>
+                                    <option value="cocktail">Cocktail Shaker</option>
+                                    <option value="gnome">Gnome Sort</option>
+                                    <option value="comb">Comb Sort</option>
+                                    <option value="tim">Tim Sort</option>
+                                </select>
+                            </div>
+                            
+                            <div class="flex flex-col gap-1 slider-container">
+                                <label class="text-xs font-medium text-gray-400 uppercase tracking-wider">Vitesse: <span id="speedValue" class="text-blue-400">50ms</span></label>
+                                <input type="range" id="speedSlider" min="1" max="200" value="50" class="w-32">
+                            </div>
+                            
+                            <div class="flex flex-col gap-1 slider-container">
+                                <label class="text-xs font-medium text-gray-400 uppercase tracking-wider">Taille: <span id="sizeValue" class="text-blue-400">50</span></label>
+                                <input type="range" id="sizeSlider" min="5" max="100" value="50" class="w-32">
+                            </div>
+                            
+                            <div class="flex flex-col gap-1">
+                                <label class="text-xs font-medium text-gray-400 uppercase tracking-wider">Thème</label>
+                                <select id="themeSelect" class="px-3 py-2 rounded-lg text-sm font-medium bg-gray-700 text-white border border-gray-600">
+                                    <option value="dark">Dark</option>
+                                    <option value="light">Light</option>
+                                    <option value="neon">Neon</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="px-6 py-3 border-b border-gray-700 bg-gray-800/30 flex flex-wrap gap-2">
+                        <button id="generateBtn" class="btn-primary px-4 py-2 rounded-lg font-semibold text-sm text-white">🎲 Aléatoire</button>
+                        <button id="startBtn" class="btn-success px-4 py-2 rounded-lg font-semibold text-sm text-white">▶ Démarrer</button>
+                        <button id="pauseBtn" class="btn-warning px-4 py-2 rounded-lg font-semibold text-sm text-white hidden">⏸ Pause</button>
+                        <button id="stepBtn" class="btn-info px-4 py-2 rounded-lg font-semibold text-sm text-white">👟 Pas à pas</button>
+                        <button id="stopBtn" class="btn-danger px-4 py-2 rounded-lg font-semibold text-sm text-white">⏹ Arrêter</button>
+                        <button id="soundBtn" class="btn-secondary px-3 py-2 rounded-lg font-semibold text-sm text-white ml-auto">🔊 Son: ON</button>
+                    </div>
+                    
+                    <!-- Custom Array -->
+                    <div class="px-6 py-3 border-b border-gray-700 bg-gray-800/20">
+                        <div class="flex flex-col gap-1">
+                            <label class="text-xs font-medium text-gray-400 uppercase tracking-wider">Valeurs personnalisées</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="customArrayInput" placeholder="45, 23, 67, 12, 89, 34..." class="flex-1 px-3 py-2 rounded-lg text-sm bg-gray-700 text-white border border-gray-600 focus:border-blue-500 transition-colors">
+                                <button id="loadCustomBtn" class="btn-primary px-4 py-2 rounded-lg font-semibold text-sm text-white">Charger</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Algorithm Explanation -->
+                    <div class="px-6 py-4 border-b border-gray-700 bg-gray-800/10">
+                        <div id="algorithmInfo">
+                            <h3 class="font-semibold text-blue-400 mb-2" id="algoTitle">Bubble Sort</h3>
+                            <p class="text-gray-300 text-sm leading-relaxed mb-3" id="algoDescription">Compare chaque paire d'éléments adjacents...</p>
+                            <div class="flex flex-wrap gap-4 text-xs text-gray-400">
+                                <span class="px-2 py-1 bg-gray-700/50 rounded">⏱ <strong>Temps:</strong> <span id="algoTime">O(n²)</span></span>
+                                <span class="px-2 py-1 bg-gray-700/50 rounded">💾 <strong>Espace:</strong> <span id="algoSpace">O(1)</span></span>
+                                <span class="px-2 py-1 bg-gray-700/50 rounded">🔄 <strong>Stable:</strong> <span id="algoStable">Oui</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Legend -->
+                    <div class="px-6 py-3 border-b border-gray-700 bg-gray-800/30 flex flex-wrap gap-4 text-sm">
+                        <div class="legend-item"><div class="legend-color" style="background-color: var(--color-default);"></div><span class="text-gray-300">Normal</span></div>
+                        <div class="legend-item"><div class="legend-color" style="background-color: var(--color-compare);"></div><span class="text-gray-300">Compare</span></div>
+                        <div class="legend-item"><div class="legend-color" style="background-color: var(--color-swap);"></div><span class="text-gray-300">Swap</span></div>
+                        <div class="legend-item"><div class="legend-color" style="background-color: var(--color-pivot);"></div><span class="text-gray-300">Pivot</span></div>
+                        <div class="legend-item"><div class="legend-color" style="background-color: var(--color-sorted);"></div><span class="text-gray-300">Trié</span></div>
+                    </div>
+                    
+                    <!-- Canvas -->
+                    <div class="p-6">
+                        <canvas id="sortCanvas" class="w-full rounded-lg"></canvas>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="px-6 py-4 border-t border-gray-700 bg-gray-800/30 flex flex-wrap gap-6 text-sm">
+                        <div><span class="text-gray-400">Comparaisons:</span><span id="comparisonCount" class="text-white font-mono ml-2">0</span></div>
+                        <div><span class="text-gray-400">Échanges:</span><span id="swapCount" class="text-white font-mono ml-2">0</span></div>
+                        <div><span class="text-gray-400">Temps:</span><span id="timeElapsed" class="text-white font-mono ml-2">0s</span></div>
+                    </div>
+                    
+                    <!-- Export -->
+                    <div class="px-6 py-3 border-t border-gray-700 bg-gray-800/20 flex gap-2">
+                        <button id="exportPngBtn" class="btn-secondary px-3 py-1.5 rounded text-xs font-medium">📷 Export PNG</button>
+                        <button id="exportCsvBtn" class="btn-secondary px-3 py-1.5 rounded text-xs font-medium">📊 Export CSV</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="space-y-4">
+                <!-- Code -->
+                <div class="rounded-2xl overflow-hidden shadow-2xl" style="background-color: var(--bg-card);">
+                    <div class="px-4 py-3 border-b border-gray-700 bg-gray-800/50"><h3 class="font-semibold text-white text-sm">💻 Code Source</h3></div>
+                    <div id="codeDisplay" class="p-4 overflow-x-auto max-h-[300px] overflow-y-auto text-sm font-mono">
+                        <div class="text-gray-500">Sélectionnez un algorithme...</div>
+                    </div>
+                </div>
+
+                <!-- History -->
+                <div class="rounded-2xl overflow-hidden shadow-2xl" style="background-color: var(--bg-card);">
+                    <div class="px-4 py-3 border-b border-gray-700 bg-gray-800/50 flex justify-between items-center">
+                        <h3 class="font-semibold text-white text-sm">📜 Historique</h3>
+                        <button id="clearHistoryBtn" class="text-xs text-red-400 hover:text-red-300">Effacer</button>
+                    </div>
+                    <div id="historyList" class="p-4 max-h-[200px] overflow-y-auto">
+                        <p class="text-gray-500 text-sm">Aucun historique</p>
+                    </div>
+                </div>
+
+                <!-- Chart -->
+                <div class="rounded-2xl overflow-hidden shadow-2xl" style="background-color: var(--bg-card);">
+                    <div class="px-4 py-3 border-b border-gray-700 bg-gray-800/50"><h3 class="font-semibold text-white text-sm">📈 Performances</h3></div>
+                    <div class="p-4 h-[200px]">
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Quiz -->
+                <div class="rounded-2xl overflow-hidden shadow-2xl" style="background-color: var(--bg-card);">
+                    <div class="px-4 py-3 border-b border-gray-700 bg-gray-800/50 flex justify-between items-center">
+                        <h3 class="font-semibold text-white text-sm">🎓 Quiz</h3>
+                        <button id="startQuizBtn" class="btn-primary px-3 py-1 rounded text-xs text-white">Démarrer</button>
+                    </div>
+                    <div id="quizContainer" class="p-4">
+                        <p class="text-gray-500 text-sm">Testez vos connaissances sur les algorithmes!</p>
+                    </div>
+                </div>
+
+                <!-- Settings -->
+                <div class="rounded-2xl overflow-hidden shadow-2xl" style="background-color: var(--bg-card);">
+                    <div class="px-4 py-3 border-b border-gray-700 bg-gray-800/50"><h3 class="font-semibold text-white text-sm">⚙️ Affichage</h3></div>
+                    <div class="p-4">
+                        <label class="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
+                            <input type="checkbox" id="showValuesCheck" checked class="w-4 h-4 rounded bg-gray-700 border-gray-600">Afficher les valeurs
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DUAL MODE -->
+        <div id="dualView" class="hidden">
+            <div class="rounded-2xl overflow-hidden shadow-2xl p-6" style="background-color: var(--bg-card);">
+                <div class="flex flex-wrap gap-4 mb-6 items-center">
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs font-medium text-gray-400 uppercase">Algorithme 1 (Gauche)</label>
+                        <select id="dualAlgo1" class="px-3 py-2 rounded-lg text-sm font-medium min-w-[160px] bg-gray-700 text-white border border-gray-600">
+                            <option value="bubble">Bubble Sort</option>
+                            <option value="quick" selected>Quick Sort</option>
+                            <option value="merge">Merge Sort</option>
+                            <option value="heap">Heap Sort</option>
+                            <option value="insertion">Insertion Sort</option>
+                            <option value="selection">Selection Sort</option>
+                            <option value="shell">Shell Sort</option>
+                            <option value="cocktail">Cocktail Shaker</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs font-medium text-gray-400 uppercase">Algorithme 2 (Droite)</label>
+                        <select id="dualAlgo2" class="px-3 py-2 rounded-lg text-sm font-medium min-w-[160px] bg-gray-700 text-white border border-gray-600">
+                            <option value="bubble">Bubble Sort</option>
+                            <option value="quick">Quick Sort</option>
+                            <option value="merge" selected>Merge Sort</option>
+                            <option value="heap">Heap Sort</option>
+                            <option value="insertion">Insertion Sort</option>
+                            <option value="selection">Selection Sort</option>
+                            <option value="shell">Shell Sort</option>
+                            <option value="cocktail">Cocktail Shaker</option>
+                        </select>
+                    </div>
+                    <div class="flex gap-2 ml-auto">
+                        <button id="dualGenerateBtn" class="btn-primary px-4 py-2 rounded-lg font-semibold text-sm text-white">🎲 Nouveau</button>
+                        <button id="dualStartBtn" class="btn-success px-4 py-2 rounded-lg font-semibold text-sm text-white">▶ Comparer</button>
+                        <button id="dualStopBtn" class="btn-danger px-4 py-2 rounded-lg font-semibold text-sm text-white">⏹ Arrêter</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Canvas 1 -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-semibold text-blue-400" id="dualTitle1">Quick Sort</h3>
+                            <div class="text-xs text-gray-400">
+                                <span id="dualComparisons1">0</span> comp | <span id="dualSwaps1">0</span> éch | <span id="dualTime1">0s</span>
+                            </div>
+                        </div>
+                        <canvas id="dualCanvas1" class="w-full rounded-lg bg-gray-900"></canvas>
+                    </div>
+
+                    <!-- Canvas 2 -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-semibold text-blue-400" id="dualTitle2">Merge Sort</h3>
+                            <div class="text-xs text-gray-400">
+                                <span id="dualComparisons2">0</span> comp | <span id="dualSwaps2">0</span> éch | <span id="dualTime2">0s</span>
+                            </div>
+                        </div>
+                        <canvas id="dualCanvas2" class="w-full rounded-lg bg-gray-900"></canvas>
+                    </div>
+                </div>
+
+                <div class="mt-4 p-4 bg-gray-800/30 rounded-lg">
+                    <p class="text-sm text-gray-300">⚡ <strong>Mode Comparaison:</strong> Les deux algorithmes s'exécutent simultanément sur le même tableau. Comparez leur efficacité en temps réel!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script_v3.js"></script>
+</body>
+</html>
